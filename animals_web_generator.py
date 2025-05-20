@@ -10,6 +10,36 @@ def load_data(file_path):
         return json.load(handle)
 
 
+def serialize_animal(animal):
+    output = ""
+    output += "<li class='cards__item'>"
+
+    if "name" in animal:
+        output += f"<div class='card__title'>{animal['name']}</div>"
+
+    output += f"<p class='card__text'>"
+    output += "<ul>"
+
+    characteristics = animal.get("characteristics", {})
+    if "diet" in characteristics:
+        output += f"<li><strong>Diet:</strong> {characteristics['diet']}</li>"
+
+    locations = animal.get("locations", [])
+    if locations:
+        output += f"<li><strong>Location:</strong> {locations[0]}</li>"
+
+    if "type" in characteristics:
+        output += f"<li><strong>Type:</strong> {characteristics['type']}</li>"
+
+    output += "</ul>"
+    output += "</div>"
+    output += "</li>"
+
+
+    return output
+
+
+
 def print_animals():
     """
     prints the Name, diet, first location from list, type for each animal
@@ -18,26 +48,10 @@ def print_animals():
     output = ""
 
     for animal in animals_data:
-        output += "<li class='cards__item'>"
+        output += serialize_animal(animal)
 
-        if "name" in animal:
-            output += f"<div class='card__title'>{animal['name']}</div>"
-
-        output += f"<p class='card__text'>"
-
-        characteristics = animal.get("characteristics", {})
-        if "diet" in characteristics:
-            output += f"<strong>Diet:</strong> {characteristics['diet']}<br/>"
-
-        locations = animal.get("locations", [])
-        if locations:
-            output += f"<strong>Location:</strong> {locations[0]}<br/>"
-
-        if "type" in characteristics:
-            output += f"<strong>Type:</strong> {characteristics['type']}<br/>"
-        output += "</p>"
-        output += "</li>"
     return output
+
 
 def get_html():
     with open("animals_template.html", "r") as file:
