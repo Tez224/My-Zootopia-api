@@ -15,22 +15,43 @@ def print_animals():
     prints the Name, diet, first location from list, type for each animal
     """
     animals_data = load_data('animals_data.json')
+    output = ""
 
     for animal in animals_data:
         if "name" in animal:
-            print(f"Name: {animal['name']}")
+            output += f"Name: {animal['name']}\n"
 
         characteristics = animal.get("characteristics", {})
         if "diet" in characteristics:
-            print(f"Diet: {characteristics['diet']}")
+            output += f"Diet: {characteristics['diet']}\n"
 
         locations = animal.get("locations", [])
         if locations:
-            print(f"Location: {locations[0]}")
+            output += f"Location: {locations[0]}\n"
 
         if "type" in characteristics:
-            print(f"Type: {characteristics['type']}")
+            output += f"Type: {characteristics['type']}\n"
 
-        print()
+        output += "\n"
+    return output
 
-print_animals()
+def get_html():
+    with open("animals_template.html", "r") as file:
+        return file.read()
+
+
+
+def replace_html_placeholder():
+    html = get_html()
+    animals_output = print_animals()
+
+    animal_html =  html.replace("__REPLACE_ANIMALS_INFO__", animals_output)
+
+    output_file = "animals.html"
+
+    with open(output_file, "w") as file:
+        file.write(animal_html)
+
+    print("HTML content has been written to", output_file)
+
+replace_html_placeholder()
