@@ -71,5 +71,3 @@ def replace_html_placeholder():
         file.write(animal_html)
 
     print("HTML content has been written to", output_file)
-
-replace_html_placeholder()
