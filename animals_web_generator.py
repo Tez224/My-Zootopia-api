@@ -1,14 +1,14 @@
 import requests
 import json
 
-def load_data():
+def load_data(user_animal):
     """
     Loads a JSON file
     :param file_path: The path to the JSON file to load.
     :return: The data of the json file, or an empty list if an error occurred.
     """
     try:
-        name = 'Fox'
+        name = user_animal
         api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(name)
 
         response = requests.get(api_url, headers={'X-Api-Key': 'FAv8L5/agkSfDxafl0Fpew==ce3t7X5VNkLcee2E'})
@@ -17,10 +17,24 @@ def load_data():
             return response.json()
         else:
             print("Error:", response.status_code, response.text)
+            return []
 
     except Exception:
         print("An error occurred.")
         return []
+
+
+def get_user_input():
+    """
+    Asks the user to enter an animal name. Handles invalid input.
+    :return: user_animal, the name parameter for the api.
+    """
+    try:
+        user_animal = input("Enter an animal you want to learn about: ")
+        return user_animal
+    except ValueError:
+        print("Invalid Input")
+
 
 def get_skin_types(animal_data):
     """
@@ -67,13 +81,13 @@ def serialize_animal(animal):
     return output
 
 
-def generate_html():
+def generate_html(user_animal):
     """
     Generates the HTML content by replacing the placeholder with actual animal data.
     :return: The generated HTML content as a string.
     """
     html = get_html()
-    animals_data = load_data()
+    animals_data = load_data(user_animal)
     animals_output = ""
 
     for animal in animals_data:
@@ -112,7 +126,9 @@ def main():
     """
     Main function to execute the tasks.
     """
-    html_content = generate_html()  # Generate HTML content
+    user_animal = get_user_input()
+
+    html_content = generate_html(user_animal)  # Generate HTML content
     if html_content:
         write_html_to_file(html_content)  # Write the generated HTML to a file
 
