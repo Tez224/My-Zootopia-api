@@ -1,5 +1,4 @@
 import requests
-import json
 
 def load_data(user_animal):
     """
@@ -89,12 +88,20 @@ def generate_html(user_animal):
     html = get_html()
     animals_data = load_data(user_animal)
     animals_output = ""
+    research_output = ("<div class='message-box'>"
+                       "<h2>Try again!</h2>"
+                       "<p>No results found for your animal search.</p>"
+                       "<p>Try to find another animal.</p>"
+                       "<button class='retry-button' onclick='window.location.reload();'>Search Again</button>"
+                       "</div>")
 
     for animal in animals_data:
         animals_output += serialize_animal(animal)
 
-    return html.replace("__REPLACE_ANIMALS_INFO__", animals_output)
-
+    if animals_data:
+        return html.replace("__REPLACE_ANIMALS_INFO__", animals_output)
+    else:
+        return html.replace("__REPLACE_ANIMALS_INFO__", research_output)
 
 def get_html():
     """
