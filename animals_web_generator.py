@@ -1,27 +1,4 @@
-import requests
-
-def load_data(user_animal):
-    """
-    Loads a JSON file
-    :param file_path: The path to the JSON file to load.
-    :return: The data of the json file, or an empty list if an error occurred.
-    """
-    try:
-        name = user_animal
-        api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(name)
-
-        response = requests.get(api_url, headers={'X-Api-Key': 'FAv8L5/agkSfDxafl0Fpew==ce3t7X5VNkLcee2E'})
-
-        if response.status_code == requests.codes.ok:
-            return response.json()
-        else:
-            print("Error:", response.status_code, response.text)
-            return []
-
-    except Exception:
-        print("An error occurred.")
-        return []
-
+import data_fetcher
 
 def get_user_input():
     """
@@ -86,7 +63,7 @@ def generate_html(user_animal):
     :return: The generated HTML content as a string.
     """
     html = get_html()
-    animals_data = load_data(user_animal)
+    animals_data = data_fetcher.fetch_data(user_animal)
     animals_output = ""
     research_output = ("<div class='message-box'>"
                        "<h2>Try again!</h2>"
