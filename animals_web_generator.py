@@ -1,20 +1,26 @@
+import requests
 import json
 
-def load_data(file_path):
+def load_data():
     """
     Loads a JSON file
     :param file_path: The path to the JSON file to load.
     :return: The data of the json file, or an empty list if an error occurred.
     """
     try:
-        with open (file_path, "r") as handle:
-            return json.load(handle)
-    except FileNotFoundError:
-        print(f"Error: The file {file_path} was not found.")
-    except json.JSONDecodeError:
-        print(f"Error: Could not decode the JSON from {file_path}.")
-    return []
+        name = 'Fox'
+        api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(name)
 
+        response = requests.get(api_url, headers={'X-Api-Key': 'FAv8L5/agkSfDxafl0Fpew==ce3t7X5VNkLcee2E'})
+
+        if response.status_code == requests.codes.ok:
+            return response.json()
+        else:
+            print("Error:", response.status_code, response.text)
+
+    except Exception:
+        print("An error occurred.")
+        return []
 
 def get_skin_types(animal_data):
     """
@@ -52,6 +58,9 @@ def serialize_animal(animal):
     if "type" in characteristics:
         output += f"<li><strong>Type:</strong> {characteristics['type']}</li>"
 
+    if "skin_type" in characteristics:
+        output += f"<li><strong>Skin Type:</strong> {characteristics['skin_type']}</li>"
+
     output += "</ul>"
     output += "</div>"
     output += "</li>"
@@ -64,7 +73,7 @@ def generate_html():
     :return: The generated HTML content as a string.
     """
     html = get_html()
-    animals_data = load_data("animals_data.json")
+    animals_data = load_data()
     animals_output = ""
 
     for animal in animals_data:
